@@ -99,8 +99,9 @@ public class ProductController {
 		//Business Logic
 		productService.updateProduct(product);
 		
-		String sessionId=((Product)session.getAttribute("product")).getProdNo();
-		if(sessionId.equals(product.getProdNo())){
+		int sessionNo=((Product)session.getAttribute("product")).getProdNo();
+		String sessionNum = Integer.toString(sessionNo);
+		if(sessionNum.equals(product.getProdNo())){
 			session.setAttribute("product", product);
 		}
 		
