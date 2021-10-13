@@ -22,7 +22,7 @@
 	 	INSERT
 		INTO product(prod_no, prod_name, prod_detail, MANUFACTURE_DAY, price, image_file, reg_date) 
 		VALUES (seq_product_prod_no.nextval, #{prodName} , #{prodDetail:VARCHAR},
-				#TO_CHAR(TO_DATE({manuDate:VARCHAR}, 'YYYY-MM-DD'), 'YYYYMMDD'), #{price:NUMERIC}, #{fileName:VARCHAR}, SYSDATE)
+				TO_CHAR(TO_DATE(#{manuDate:VARCHAR}, 'YYYY-MM-DD'), 'YYYYMMDD'), #{price:NUMERIC}, #{fileName:VARCHAR}, SYSDATE)
 	</insert>
 	 
 	 <!-- SQL : SELECT ONE -->
@@ -54,10 +54,13 @@
 											<if test="searchCondition != null">
 												<where>
 													<if test="searchCondition == 0 and searchKeyword !='' ">
-										 				prod_no = #{searchKeyword}
+										 				prod_no LIKE '%'||#{searchKeyword}||'%'
 													</if>
 													<if test="searchCondition == 1 and searchKeyword !='' ">
-										 				prod_name = #{searchKeyword}
+										 				prod_name LIKE '%'||#{searchKeyword}||'%'
+													</if>
+													<if test="searchCondition == 2 and searchKeyword !='' ">
+										 				price LIKE '%'||#{searchKeyword}||'%'
 													</if>
 												</where>
 											</if>
@@ -88,6 +91,9 @@
 								</if>
 								<if test="searchCondition == 1 and searchKeyword !='' ">
 						 			prod_name = #{searchKeyword}
+								</if>
+								<if test="searchCondition == 2 and searchKeyword !='' ">
+						 			price = #{searchKeyword}
 								</if>
 							</where>
 						</if> ) countTable						

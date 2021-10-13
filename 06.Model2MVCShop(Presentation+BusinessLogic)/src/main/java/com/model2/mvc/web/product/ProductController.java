@@ -51,7 +51,7 @@ public class ProductController {
 
 		System.out.println("/addProductView.do");
 		
-		return "redirect:/product/addProductView.jsp";
+		return "forward:/product/addProductView.jsp";
 	}
 	
 	
@@ -62,7 +62,7 @@ public class ProductController {
 		//Business Logic
 		productService.addProduct(product);
 		
-		return "redirect:/product/addProduct.jsp";
+		return "forward:/product/addProduct.jsp";
 	}
 	
 	
@@ -88,7 +88,7 @@ public class ProductController {
 		// Model °ú View ¿¬°á
 		model.addAttribute("product", product);
 		
-		return "forward:/product/updateProduct.jsp";
+		return "forward:/product/updateProductView.jsp";
 	}
 	
 	
@@ -99,7 +99,11 @@ public class ProductController {
 		//Business Logic
 		productService.updateProduct(product);
 		
-		int sessionNo=((Product)session.getAttribute("product")).getProdNo();
+		System.out.println("session ::"+session.getAttribute("product"));
+		System.out.println("prod ::"+product.getProdNo());
+		
+		/* int sessionNo=((Product)request.getAttribute("product")).getProdNo(); */
+		int sessionNo=product.getProdNo();
 		String sessionNum = Integer.toString(sessionNo);
 		if(sessionNum.equals(product.getProdNo())){
 			session.setAttribute("product", product);
