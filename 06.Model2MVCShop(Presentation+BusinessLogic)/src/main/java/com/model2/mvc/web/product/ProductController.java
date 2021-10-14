@@ -2,7 +2,9 @@ package com.model2.mvc.web.product;
 
 import java.util.Map;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,13 +69,41 @@ public class ProductController {
 	
 	
 	@RequestMapping("/getProduct.do")
-	public String getProduct( @RequestParam("prodNo") int prodNo , Model model ) throws Exception {
+	public String getProduct( @RequestParam("prodNo") int prodNo , Model model
+							  ,HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
 		System.out.println("/getProduct.do");
 		//Business Logic
 		Product product = productService.getProduct(prodNo);
 		// Model 과 View 연결
 		model.addAttribute("product", product);
+		
+		
+		//Product vo = (Product)request.getAttribute("vo");
+		//System.out.println(vo + "getProduct");
+		
+		int coooookie = Integer.parseInt(request.getParameter("prodNo"));
+		
+		Product vo = new Product();
+		vo.setProdNo(coooookie);
+
+		String history = null;
+		Cookie[] cookies = request.getCookies();
+		if (cookies!=null && cookies.length > 0) {
+			for (int i = 0; i < cookies.length; i++) {
+				Cookie cookie = cookies[i];
+				if (cookie.getName().equals("history")) {
+					history = cookie.getValue();
+				}
+			}
+			
+			System.out.println("product Number : " + vo.getProdNo());
+			
+			history += "," + vo.getProdNo();
+			Cookie cookie = new Cookie("history", history);
+			response.addCookie(cookie);
+		}
+		
 		
 		return "forward:/product/getProduct.jsp";
 	}
@@ -93,12 +123,13 @@ public class ProductController {
 	
 	
 	@RequestMapping("/updateProduct.do")
-	public String updateProduct( @ModelAttribute("product") Product product , Model model , HttpSession session) throws Exception{
+	public String updateProduct( @ModelAttribute("product") Product product , Model model , 								 								 HttpSession session, HttpServletRequest request) throws Exception{
 
 		System.out.println("/updateProduct.do");
 		//Business Logic
 		productService.updateProduct(product);
 		
+		System.out.println("updateProduct.do menu값 : " + request.getParameter("menu"));
 		System.out.println("session ::"+session.getAttribute("product"));
 		System.out.println("prod ::"+product.getProdNo());
 		
@@ -109,7 +140,8 @@ public class ProductController {
 			session.setAttribute("product", product);
 		}
 		
-		return "redirect:/getProduct.do?prodNo="+product.getProdNo();
+		return "redirect:/getProduct.do?prodNo="+product.getProdNo()+
+				"&menu="+request.getParameter("menu");
 	}
 	
 	

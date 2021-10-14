@@ -2,26 +2,6 @@
 <%@ page language="java" contentType="text/html; charset=EUC-KR"
     pageEncoding="EUC-KR"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>    
-
-<%--
-	Product vo = (Product)request.getAttribute("vo");
-	//System.out.println(vo + "getProduct");
-
-	String history = null;
-	Cookie[] cookies = request.getCookies();
-	if (cookies!=null && cookies.length > 0) {
-		for (int i = 0; i < cookies.length; i++) {
-			Cookie cookie = cookies[i];
-			if (cookie.getName().equals("history")) {
-				history = cookie.getValue();
-			}
-		}
-		
-		history += "," + vo.getProdNo();
-		Cookie cookie = new Cookie("history", history);
-		response.addCookie(cookie);
-	}
---%>	    
     
     
 <html>
